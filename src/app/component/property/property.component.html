@@ -1,0 +1,236 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success p-mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="properties"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="[
+      'name',
+    ]"
+    [(selection)]="selected"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">Manage Property</h5>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="name">
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="type">
+          Property Type <p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="address">
+          Address <p-sortIcon field="address"></p-sortIcon>
+        </th>
+        <th pSortableColumn="units">
+          Total Units <p-sortIcon field="units"></p-sortIcon>
+        </th>
+        <th pSortableColumn="managementStatus">
+          Management Status <p-sortIcon field="managementStatus"></p-sortIcon>
+        </th>
+        <th pSortableColumn="propertyStatus">
+          Property Status <p-sortIcon field="propertyStatus"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-property>
+      <tr>
+        <td>
+          <!-- <p-tableCheckbox [value]="property"></p-tableCheckbox> -->
+        </td>
+        <td>
+          <a [routerLink]="['/property', property.propertyId, 'unit']">
+            {{ property.name }}</a
+          >
+        </td>
+        <td>{{ property.propertyType }}</td>
+        <td>{{ property.address }}</td>
+        <td>{{ property.units ? property.units.length : 0 }}</td>
+        <td>{{ property.managementStatus }}</td>
+        <td>{{ property.propertyStatus }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="editProperty(property)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            (click)="deleteProperty(property)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ properties ? properties.length : 0 }} properties.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="propertyDialog"
+  [style]="{ width: '450px' }"
+  header="Property Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        pInputText
+        id="name"
+        [(ngModel)]="property.name"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !property.name"
+        >Name is required.</small
+      >
+    </div>
+    <div class="p-field">
+      <label for="address">Address</label>
+      <textarea
+        id="address"
+        pInputTextarea
+        [(ngModel)]="property.address"
+        required
+        rows="3"
+        cols="20"
+      ></textarea>
+    </div>
+    <div class="p-field">
+      <label for="type">Type</label>
+      <p-dropdown
+        [(ngModel)]="property.propertyType"
+        inputId="type"
+        [options]="propertyType"
+        placeholder="Select"
+      >
+        <ng-template let-option pTemplate="item">
+          <span [class]="'product-badge status-' + option.label">{{
+            option.label
+          }}</span>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="managementStatus">Management Status</label>
+      <p-dropdown
+        [(ngModel)]="property.managementStatus"
+        inputId="managementStatus"
+        [options]="managementStatus"
+        placeholder="Select"
+      >
+        <ng-template let-option pTemplate="item">
+          <span [class]="'product-badge status-' + option.value">{{
+            option.label
+          }}</span>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="p-field">
+      <label for="propertyStatus">Property Status</label>
+      <p-dropdown
+        [(ngModel)]="property.propertyStatus"
+        inputId="propertyStatus"
+        [options]="propertyStatus"
+        placeholder="Select"
+      >
+        <ng-template let-option pTemplate="item">
+          <span [class]="'product-badge status-' + option.value">{{
+            option.label
+          }}</span>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col-6">
+        <label for="price">Common Area Maint. Fee</label>
+        <p-inputNumber
+          id="price"
+          [(ngModel)]="property.maintenanceFee"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+        ></p-inputNumber>
+      </div>
+
+      <div class="p-field p-col">
+        <label for="builtDate">Date Constructed</label>
+        <p-calendar
+          inputId="builtDate"
+          [(ngModel)]="property.builtDate"
+          appendTo="body"
+        ></p-calendar>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveProperty()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

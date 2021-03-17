@@ -1,0 +1,41 @@
+<form [formGroup]="form">
+  <ng-container [formGroup]="userForm">
+    <span class="p-float-label">
+      <input
+        id="float-input"
+        type="text"
+        pInputText
+        formControlName="username"
+      />
+      <label for="float-input">Username</label>
+    </span>
+    <span class="p-float-label">
+      <input id="float-input" type="text" pInputText formControlName="name" />
+      <label for="float-input">Name</label>
+    </span>
+    <span class="p-float-label">
+      <input
+        id="float-input"
+        type="text"
+        pInputText
+        formControlName="password"
+      />
+      <label for="float-input">Password</label>
+    </span>
+    <span class="p-float-label">
+      <input id="float-input" type="text" pInputText formControlName="type" />
+      <label for="float-input">Type</label>
+    </span>
+  </ng-container>
+  <ng-container [formGroup]="contactForm">
+    <span class="p-float-label">
+      <input id="float-input" type="text" pInputText formControlName="email" />
+      <label for="float-input">Email</label>
+    </span>
+    <span class="p-float-label">
+      <input id="float-input" type="text" pInputText formControlName="phone" />
+      <label for="float-input">Phone</label>
+    </span>
+  </ng-container>
+  <button pButton type="button" (click)="createUser()">Submit</button>
+</form>

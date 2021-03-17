@@ -1,0 +1,10 @@
+<p>{{test}}</p>
+
+
+<form [formGroup] = "testForm">
+    Name: <input type="text" id="name" formControlName="name"> <br>
+    Username: <input type="text" id="name" formControlName="username"> <br>
+    Password: <input type="text" id="name" formControlName="password"><br>
+    Type: <input type="text" id="name" formControlName="type"><br>
+    <button type="button" (click)="onSubmit()">Send</button>
+</form>
