@@ -12,4 +12,13 @@ export class UnitService {
       .get<Unit[]>(`/api/properties/${propertyId}/unit`)
       .toPromise();
   }
+
+  async bulkAddUnits(payload: Unit[]): Promise<Unit[]> {
+    console.log(payload);
+    return await this.http.post<Unit[]>('/api/units/bulk', payload).toPromise();
+  }
+
+  async deleteUnit(id: number): Promise<any> {
+    return await this.http.delete<any>(`/api/units/${id}`).toPromise();
+  }
 }

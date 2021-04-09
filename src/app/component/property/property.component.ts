@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {
@@ -23,11 +24,13 @@ export class PropertyComponent implements OnInit {
   managementStatus: { label: ManagementStatus; value: ManagementStatus }[];
   propertyStatus: { label: PropertyStatus; value: PropertyStatus }[];
   propertyType: { label: PropertyType; value: PropertyType }[];
+  propertyForm: FormGroup;
 
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private propertyService: PropertyService
+    private propertyService: PropertyService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +50,17 @@ export class PropertyComponent implements OnInit {
       label: key,
       value: key,
     }));
+
+    // init property form
+    this.propertyForm = this.fb.group({
+      name: this.fb.control('', Validators.required),
+      address: this.fb.control('', Validators.required),
+      propertyType: this.fb.control('', Validators.required),
+      managementStatus: this.fb.control('', Validators.required),
+      propertyStatus: this.fb.control('', Validators.required),
+      maintenanceFee: this.fb.control('', Validators.min(0)),
+      builtDate: this.fb.control('', Validators.required),
+    });
   }
 
   openNew() {
@@ -121,6 +135,9 @@ export class PropertyComponent implements OnInit {
           detail: 'Property Created',
           life: 3000,
         });
+
+        // bulk add units
+        this.showBulkUnit(res.propertyId);
       }
 
       this.properties = [...this.properties];
@@ -139,5 +156,16 @@ export class PropertyComponent implements OnInit {
     }
 
     return index;
+  }
+
+  bulkUnit: boolean = false;
+  propertyId: number;
+  showBulkUnit(propertyId) {
+    this.bulkUnit = true;
+    this.propertyId = propertyId;
+  }
+
+  onBulkUnitClose(event) {
+    this.bulkUnit = event;
   }
 }

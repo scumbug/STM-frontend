@@ -1,0 +1,76 @@
+<p-dialog
+  [(visible)]="bulkUnit"
+  (onHide)="onClose()"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="header">
+    Add Units
+    <button
+      pButton
+      pRipple
+      label=""
+      icon="pi pi-plus"
+      class="p-button-success p-mr-2"
+      (click)="addUnit()"
+    ></button>
+  </ng-template>
+  <span *ngIf="unitArray.length == 0">Add a unit using the "+" button</span>
+
+  <div
+    class="form-row mt-1"
+    *ngFor="let units of unitArray.controls; index as i"
+    [formGroup]="units"
+  >
+    <div class="p-formgrid p-grid p-align-center">
+      <div class="p-col-1">{{ i + 1 }}</div>
+      <div class="p-field p-col-6">
+        <label for="unitNumber">Unit Number </label>
+        <input
+          type="text"
+          pInputText
+          required
+          autofocus
+          formControlName="unitNumber"
+        />
+        <small class="p-error" *ngIf="submitted && !property.name"
+          >Unit Number is required.</small
+        >
+      </div>
+
+      <div class="p-field p-col">
+        <label for="floorArea">Floor Area </label>
+        <p-inputNumber
+          mode="decimal"
+          formControlName="floorArea"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          suffix=" sqm"
+        ></p-inputNumber>
+
+        <small class="p-error" *ngIf="submitted && !property.name"
+          >Floor Area is required.</small
+        >
+      </div>
+
+      <button
+        pButton
+        pRipple
+        icon="pi pi-trash"
+        class="p-button-rounded p-button-warning"
+        (click)="removeUnit(i)"
+      ></button>
+    </div>
+  </div>
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="this.bulkUnitForm.invalid"
+    ></button>
+  </p-footer>
+</p-dialog>

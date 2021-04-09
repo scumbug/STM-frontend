@@ -44,9 +44,7 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 3rem">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
+        <th style="width: 3rem"></th>
         <th pSortableColumn="name">
           Name <p-sortIcon field="name"></p-sortIcon>
         </th>
@@ -66,6 +64,23 @@
           Property Status <p-sortIcon field="propertyStatus"></p-sortIcon>
         </th>
         <th></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="name"></p-columnFilter>
+        </th>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="address"></p-columnFilter>
+        </th>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="managementStatus"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="propertyStatus"></p-columnFilter>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-property>
@@ -141,6 +156,9 @@
         rows="3"
         cols="20"
       ></textarea>
+      <small class="p-error" *ngIf="submitted && !property.address"
+        >Address is required.</small
+      >
     </div>
     <div class="p-field">
       <label for="type">Type</label>
@@ -234,3 +252,9 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<app-bulk-unit
+  [bulkUnit]="bulkUnit"
+  [propertyId]="propertyId"
+  (bulkUnitEmitter)="onBulkUnitClose($event)"
+></app-bulk-unit>

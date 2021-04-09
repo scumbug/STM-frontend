@@ -21,6 +21,10 @@ import { PrimengModule } from './primeng.module';
 import { PropertyService } from './service/property.service';
 import { UnitComponent } from './component/unit/unit.component';
 import { UnitService } from './service/unit.service';
+import { BulkUnitComponent } from './component/bulk-unit/bulk-unit.component';
+import { TenantComponent } from './component/tenant/tenant.component';
+import { TenantFormComponent } from './component/forms/tenant-form/tenant-form.component';
+import { TenantService } from './service/tenant.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,9 @@ import { UnitService } from './service/unit.service';
     PropertyComponent,
     UserAdminComponent,
     UnitComponent,
+    BulkUnitComponent,
+    TenantComponent,
+    TenantFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +56,7 @@ import { UnitService } from './service/unit.service';
     MessageService,
     PropertyService,
     UnitService,
+    TenantService,
   ],
   bootstrap: [AppComponent],
 })

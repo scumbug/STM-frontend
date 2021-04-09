@@ -1,35 +1,36 @@
 <p-toast></p-toast>
 
-<app-bulk-unit
-  [bulkUnit]="bulkUnit"
-  [propertyId]="propertyId"
-  (bulkUnitEmitter)="onBulkUnitClose($event)"
-></app-bulk-unit>
+<app-tenant-form
+  [tenantForm]="tenantForm"
+  (tenantFormEmitter)="onTenantFormClose($event)"
+></app-tenant-form>
 
 <p-toolbar styleClass="p-mb-4">
   <ng-template pTemplate="left">
     <button
       pButton
       pRipple
-      label="Back to Properties"
-      icon="pi pi-arrow-left"
-      class="p-button-warning p-mr-2"
-      [routerLink]="['/property']"
-    ></button>
-    <button
-      pButton
-      pRipple
       label="New"
       icon="pi pi-plus"
       class="p-button-success p-mr-2"
-      (click)="showBulkUnit(propertyId)"
+      (click)="showTenantForm()"
     ></button>
+    <span class="p-buttonset">
+      <button
+        pButton
+        type="button"
+        label="Potential"
+        icon="pi pi-check"
+      ></button>
+      <button pButton type="button" label="Active" icon="pi pi-trash"></button>
+      <button pButton type="button" label="All" icon="pi pi-times"></button>
+    </span>
   </ng-template>
 </p-toolbar>
 
 <p-table
   #dt
-  [value]="units"
+  [value]="tenants"
   [rows]="10"
   [paginator]="true"
   [globalFilterFields]="[
@@ -42,7 +43,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="p-d-flex p-ai-center p-jc-between">
-      <h5 class="p-m-0">Manage unit</h5>
+      <h5 class="p-m-0">Manage Potential Tenants</h5>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input
@@ -59,58 +60,52 @@
       <th style="width: 3rem">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th pSortableColumn="unitNumber">
-        Unit Number <p-sortIcon field="unitNumber"></p-sortIcon>
+      <th pSortableColumn="name">
+        Name <p-sortIcon field="name"></p-sortIcon>
       </th>
-      <th pSortableColumn="floorArea">
-        Floor Area <p-sortIcon field="floorArea"></p-sortIcon>
+      <th pSortableColumn="assignedAgent">
+        Assigned Sales Agent <p-sortIcon field="assignedAgent"></p-sortIcon>
       </th>
-      <th>Current Leasee</th>
-      <th>Lease Start</th>
-      <th>Lease End</th>
       <th></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-unit>
+  <ng-template pTemplate="body" let-tenant>
     <tr>
       <td>
-        <p-tableCheckbox [value]="unit"></p-tableCheckbox>
+        <p-tableCheckbox [value]="tenant"></p-tableCheckbox>
       </td>
-      <td>{{ unit.unitNumber }}</td>
-      <td>{{ unit.floorArea }}</td>
+      <td>{{ tenant.user.name }}</td>
+      <td>{{ tenant.assignedAgent.name }}</td>
       <td></td>
-      <td></td>
-      <td></td>
-
       <td>
         <button
           pButton
           pRipple
           icon="pi pi-pencil"
           class="p-button-rounded p-button-success p-mr-2"
-          (click)="editUnit(unit)"
+          (click)="editTenant(tenant)"
         ></button>
-        <button
+        <!-- <button
           pButton
           pRipple
           icon="pi pi-trash"
           class="p-button-rounded p-button-warning"
-          (click)="deleteUnit(unit)"
-        ></button>
+          (click)="deleteTenant(tenant)"
+        ></button> -->
       </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="summary">
     <div class="p-d-flex p-ai-center p-jc-between">
-      In total there are {{ units ? units.length : 0 }} units.
+      In total there are {{ tenants ? tenants.length : 0 }} tenants.
     </div>
   </ng-template>
 </p-table>
 
 <p-dialog
-  [(visible)]="unitDialog"
+  [(visible)]="tenantDialog"
   [style]="{ width: '450px' }"
-  header="Unit Details"
+  header="tenant Details"
   [modal]="true"
   styleClass="p-fluid"
 >
@@ -121,11 +116,11 @@
         type="text"
         pInputText
         id="name"
-        [(ngModel)]="unit.name"
+        [(ngModel)]="tenant.name"
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !unit.name"
+      <small class="p-error" *ngIf="submitted && !tenant.name"
         >Name is required.</small
       >
     </div>
@@ -134,7 +129,7 @@
       <textarea
         id="address"
         pInputTextarea
-        [(ngModel)]="unit.address"
+        [(ngModel)]="tenant.address"
         required
         rows="3"
         cols="20"
@@ -143,9 +138,9 @@
     <div class="p-field">
       <label for="type">Type</label>
       <p-dropdown
-        [(ngModel)]="unit.unitType"
+        [(ngModel)]="tenant.tenantType"
         inputId="type"
-        [options]="unitType"
+        [options]="tenantType"
         placeholder="Select"
       >
         <ng-template let-option pTemplate="item">
@@ -159,7 +154,7 @@
     <div class="p-field">
       <label for="managementStatus">Management Status</label>
       <p-dropdown
-        [(ngModel)]="unit.managementStatus"
+        [(ngModel)]="tenant.managementStatus"
         inputId="managementStatus"
         [options]="managementStatus"
         placeholder="Select"
@@ -173,11 +168,11 @@
     </div>
 
     <div class="p-field">
-      <label for="unitStatus">unit Status</label>
+      <label for="tenantStatus">tenant Status</label>
       <p-dropdown
-        [(ngModel)]="unit.unitStatus"
-        inputId="unitStatus"
-        [options]="unitStatus"
+        [(ngModel)]="tenant.tenantStatus"
+        inputId="tenantStatus"
+        [options]="tenantStatus"
         placeholder="Select"
       >
         <ng-template let-option pTemplate="item">
@@ -193,7 +188,7 @@
         <label for="price">Common Area Maint. Fee</label>
         <p-inputNumber
           id="price"
-          [(ngModel)]="unit.maintenanceFee"
+          [(ngModel)]="tenant.maintenanceFee"
           mode="currency"
           currency="USD"
           locale="en-US"
@@ -204,7 +199,7 @@
         <label for="builtDate">Date Constructed</label>
         <p-calendar
           inputId="builtDate"
-          [(ngModel)]="unit.builtDate"
+          [(ngModel)]="tenant.builtDate"
           appendTo="body"
         ></p-calendar>
       </div>
@@ -226,7 +221,7 @@
       label="Save"
       icon="pi pi-check"
       class="p-button-text"
-      (click)="saveUnit()"
+      (click)="savetenant()"
     ></button>
   </ng-template>
 </p-dialog>

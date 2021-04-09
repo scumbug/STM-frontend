@@ -1,0 +1,54 @@
+<p-dialog
+  [(visible)]="tenantForm"
+  (onHide)="onClose()"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="header"> Add Tenant </ng-template>
+
+  <form [formGroup]="userFormGroup">
+    <label for="name">Name </label>
+    <input type="text" pInputText formControlName="name" />
+    <label for="username">Username </label>
+    <input type="text" pInputText formControlName="username" />
+    <label for="password">Password </label>
+    <input type="text" pInputText formControlName="password" />
+  </form>
+
+  <form [formGroup]="contactFormGroup">
+    <label for="contactNumber">Contact Number </label>
+    <input type="text" pInputText formControlName="contactNumber" />
+    <label for="contactEmail">Email </label>
+    <input type="text" pInputText formControlName="contactEmail" />
+  </form>
+
+  <form [formGroup]="tenantFormGroup">
+    <label for="assignedAgent">Assigned Agent</label>
+    <p-dropdown
+      [options]="agents"
+      optionLabel="name"
+      optionValue="userId"
+      formControlName="assignedAgent"
+    ></p-dropdown>
+    <label for="company">Company </label>
+    <input type="text" pInputText formControlName="company" />
+    <label for="notes">Notes </label>
+    <textarea pInputTextarea formControlName="notes"></textarea>
+  </form>
+
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="
+        this.tenantFormGroup.invalid ||
+        this.contactFormGroup.invalid ||
+        this.userFormGroup.invalid
+      "
+    ></button>
+  </p-footer>
+</p-dialog>

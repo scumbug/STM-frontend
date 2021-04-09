@@ -11,6 +11,11 @@ export class UserService {
 
   // GET /users
 
+  // GET /users/agents
+  async getAllAgents(): Promise<User[]> {
+    return await this.http.get<User[]>('/api/users/agents').toPromise();
+  }
+
   // POST /users
   async addUser(payload): Promise<User> {
     const res = await this.http

@@ -6,7 +6,7 @@ export interface Contact {
   contactEmail: string;
 }
 
-enum ContactType {
-  PRIMARY,
-  BILLING,
+export enum ContactType {
+  PRIMARY = 'PRIMARY',
+  BILLING = 'BILLING',
 }
