@@ -1,18 +1,18 @@
 <p-dialog
-  [(visible)]="tenantForm"
+  [(visible)]="convertTenantForm"
   (onHide)="onClose()"
   [style]="{ width: '450px' }"
   styleClass="p-fluid"
 >
   <ng-template pTemplate="header"> Add Tenant </ng-template>
 
-  <form [formGroup]="userFormGroup">
+  <form [formGroup]="leaseFormGroup">
     <label for="name">Name </label>
-    <input type="text" pInputText formControlName="name" />
+    <input type="text" pInputText formControlName="unitId" />
     <label for="username">Username </label>
-    <input type="text" pInputText formControlName="username" />
+    <input type="text" pInputText formControlName="tenantId" />
     <label for="password">Password (min 8 character) </label>
-    <input type="text" pInputText formControlName="password" type="password" />
+    <input type="text" pInputText formControlName="rent" />
   </form>
 
   <form [formGroup]="contactFormGroup">
@@ -23,17 +23,8 @@
   </form>
 
   <form [formGroup]="tenantFormGroup">
-    <label for="assignedAgent">Assigned Agent</label>
-    <p-dropdown
-      [options]="agents"
-      optionLabel="name"
-      optionValue="userId"
-      formControlName="assignedAgent"
-    ></p-dropdown>
-    <label for="company">Company </label>
-    <input type="text" pInputText formControlName="company" />
     <label for="notes">Notes </label>
-    <textarea pInputTextarea formControlName="notes"></textarea>
+    <textarea pInputTextarea formControlName="tenantId"></textarea>
   </form>
 
   <p-footer>
@@ -44,11 +35,7 @@
       icon="pi pi-check"
       class="p-button-text"
       (click)="onSubmit()"
-      [disabled]="
-        this.tenantFormGroup.invalid ||
-        this.contactFormGroup.invalid ||
-        this.userFormGroup.invalid
-      "
+      [disabled]="this.leaseFormGroup.invalid || this.contactFormGroup.invalid"
     ></button>
   </p-footer>
 </p-dialog>

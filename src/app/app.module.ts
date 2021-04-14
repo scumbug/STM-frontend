@@ -25,6 +25,9 @@ import { BulkUnitComponent } from './component/bulk-unit/bulk-unit.component';
 import { TenantComponent } from './component/tenant/tenant.component';
 import { TenantFormComponent } from './component/forms/tenant-form/tenant-form.component';
 import { TenantService } from './service/tenant.service';
+import { LandingComponent } from './component/landing/landing.component';
+import { AdminComponent } from './component/admin/admin.component';
+import { ConvertTenantFormComponent } from './component/forms/convert-tenant-form/convert-tenant-form.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { TenantService } from './service/tenant.service';
     BulkUnitComponent,
     TenantComponent,
     TenantFormComponent,
+    LandingComponent,
+    AdminComponent,
+    ConvertTenantFormComponent,
   ],
   imports: [
     BrowserModule,

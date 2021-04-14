@@ -1,3 +1,4 @@
+import { ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
@@ -35,7 +36,15 @@ export class PropertyComponent implements OnInit {
 
   ngOnInit(): void {
     // grab all property from backend
-    this.propertyService.getProperties().then((res) => (this.properties = res));
+    this.propertyService.getProperties().then((res) => {
+      this.properties = res;
+      // grab available leased units
+      for (let property of this.properties) {
+        this.getLeasedUnit(property.propertyId).then((res) => {
+          property.leasedUnits = res;
+        });
+      }
+    });
 
     // setup enums
     this.propertyStatus = Object.values(PropertyStatus).map((key) => ({
@@ -167,5 +176,9 @@ export class PropertyComponent implements OnInit {
 
   onBulkUnitClose(event) {
     this.bulkUnit = event;
+  }
+
+  async getLeasedUnit(id: number): Promise<number> {
+    return (await this.propertyService.getLeaseUnitById(id)) as number;
   }
 }

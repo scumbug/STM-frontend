@@ -11,6 +11,8 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./tenant.component.css'],
 })
 export class TenantComponent implements OnInit {
+  convertTenantForm: boolean = false;
+  tenant: Tenant;
   tenantForm: boolean = false;
   tenants: TenantWrapper[];
 
@@ -25,11 +27,42 @@ export class TenantComponent implements OnInit {
       .then((res) => (this.tenants = res));
   }
 
+  showConvertTenantForm() {
+    this.convertTenantForm = true;
+  }
   showTenantForm() {
     this.tenantForm = true;
   }
 
   onTenantFormClose(event) {
     this.tenantForm = event;
+  }
+
+  onConvertTenantFormClose(event) {
+    this.convertTenantForm = event;
+  }
+
+  async convertTenant(wrapper) {
+    await this.tenantService.convertTenant(wrapper.tenant.tenantId);
+    // refresh table
+    await this.tenantService
+      .getTenants(TenantStatus.POTENTIAL)
+      .then((res) => (this.tenants = res));
+  }
+
+  async showPotentialTenant() {
+    await this.tenantService
+      .getTenants(TenantStatus.POTENTIAL)
+      .then((res) => (this.tenants = res));
+  }
+
+  async showActiveTenant() {
+    await this.tenantService
+      .getTenants(TenantStatus.ACTIVE)
+      .then((res) => (this.tenants = res));
+  }
+
+  async showAllTenant() {
+    await this.tenantService.getTenants().then((res) => (this.tenants = res));
   }
 }

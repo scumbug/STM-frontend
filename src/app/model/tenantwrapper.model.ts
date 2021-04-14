@@ -4,7 +4,7 @@ import { User } from './user.model';
 
 export interface TenantWrapper {
   user: User;
-  contacts?: Contact[];
+  contact?: Contact[];
   tenant: Tenant;
   assignedAgent?: User;
 }

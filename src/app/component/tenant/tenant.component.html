@@ -5,6 +5,11 @@
   (tenantFormEmitter)="onTenantFormClose($event)"
 ></app-tenant-form>
 
+<app-convert-tenant-form>
+  [convertTenantForm]="convertTenantForm" [tenant]="tenant"
+  (convertTenantFormEmitter)="onConvertTenantFormClose($event)"
+</app-convert-tenant-form>
+
 <p-toolbar styleClass="p-mb-4">
   <ng-template pTemplate="left">
     <button
@@ -20,10 +25,20 @@
         pButton
         type="button"
         label="Potential"
-        icon="pi pi-check"
+        (click)="showPotentialTenant()"
       ></button>
-      <button pButton type="button" label="Active" icon="pi pi-trash"></button>
-      <button pButton type="button" label="All" icon="pi pi-times"></button>
+      <button
+        pButton
+        type="button"
+        label="Active"
+        (click)="showActiveTenant()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="All"
+        (click)="showAllTenant()"
+      ></button>
     </span>
   </ng-template>
 </p-toolbar>
@@ -66,6 +81,7 @@
       <th pSortableColumn="assignedAgent">
         Assigned Sales Agent <p-sortIcon field="assignedAgent"></p-sortIcon>
       </th>
+      <th>Tenant Status</th>
       <th></th>
     </tr>
   </ng-template>
@@ -76,7 +92,7 @@
       </td>
       <td>{{ tenant.user.name }}</td>
       <td>{{ tenant.assignedAgent.name }}</td>
-      <td></td>
+      <td>{{ tenant.tenant.tenantStatus }}</td>
       <td>
         <button
           pButton
@@ -85,13 +101,14 @@
           class="p-button-rounded p-button-success p-mr-2"
           (click)="editTenant(tenant)"
         ></button>
-        <!-- <button
+        <button
           pButton
           pRipple
-          icon="pi pi-trash"
+          label="Convert"
           class="p-button-rounded p-button-warning"
-          (click)="deleteTenant(tenant)"
-        ></button> -->
+          (click)="convertTenant(tenant)"
+          *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
+        ></button>
       </td>
     </tr>
   </ng-template>

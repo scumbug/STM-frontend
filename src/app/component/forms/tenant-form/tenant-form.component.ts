@@ -1,13 +1,11 @@
-import { Output } from '@angular/core';
-import { EventEmitter } from '@angular/core';
-import { Input } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ContactType } from 'src/app/model/contact.model';
 import { TenantStatus } from 'src/app/model/tenant.model';
 import { TenantWrapper } from 'src/app/model/tenantwrapper.model';
 import { User, UserType } from 'src/app/model/user.model';
+import { TenantService } from 'src/app/service/tenant.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -28,7 +26,8 @@ export class TenantFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
-    private UserService: UserService
+    private UserService: UserService,
+    private tenantService: TenantService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +46,10 @@ export class TenantFormComponent implements OnInit {
     return this.fb.group({
       contactType: ContactType.PRIMARY,
       contactNumber: this.fb.control('', Validators.required),
-      contactEmail: this.fb.control('', Validators.required),
+      contactEmail: this.fb.control('', [
+        Validators.required,
+        Validators.email,
+      ]),
       userId: null,
     });
   }
@@ -86,9 +88,10 @@ export class TenantFormComponent implements OnInit {
     const payload: TenantWrapper = {
       tenant: this.tenantFormGroup.value,
       user: this.userFormGroup.value,
-      contacts: [this.contactFormGroup.value],
+      contact: [this.contactFormGroup.value],
     };
     console.log(payload);
+    this.tenantService.addTenant(payload as TenantWrapper);
 
     // send toast
     this.messageService.add({

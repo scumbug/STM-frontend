@@ -1,0 +1,17 @@
+<form [formGroup]="templateForm">
+  <h3>Update email template</h3>
+  <h5>
+    Use {{ "{" }}totalDueAmount{{ "}" }} to reflect tenant's payment due amount
+  </h5>
+  <textarea
+    name="template"
+    pInputTextarea
+    formControlName="content"
+    [value]="templateField"
+    [rows]="5"
+    [cols]="80"
+  >
+  </textarea>
+</form>
+<p-button (click)="updateForm()">Update</p-button> <br /><br />
+<p-button [routerLink]="['/landing']">Back to Landing Page</p-button>

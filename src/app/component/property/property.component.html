@@ -55,7 +55,7 @@
           Address <p-sortIcon field="address"></p-sortIcon>
         </th>
         <th pSortableColumn="units">
-          Total Units <p-sortIcon field="units"></p-sortIcon>
+          Total Units / Leased Units <p-sortIcon field="units"></p-sortIcon>
         </th>
         <th pSortableColumn="managementStatus">
           Management Status <p-sortIcon field="managementStatus"></p-sortIcon>
@@ -95,7 +95,10 @@
         </td>
         <td>{{ property.propertyType }}</td>
         <td>{{ property.address }}</td>
-        <td>{{ property.units ? property.units.length : 0 }}</td>
+        <td>
+          {{ property.units ? property.units.length : 0 }} /
+          {{ property.leasedUnits }}
+        </td>
         <td>{{ property.managementStatus }}</td>
         <td>{{ property.propertyStatus }}</td>
         <td>

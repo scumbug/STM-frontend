@@ -1,19 +1,23 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../model/user.model';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class UserService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
-  // TODO grab token
-  headers = new HttpHeaders().set('Authorization', 'Bearer 12345');
+  headers = new HttpHeaders().set('Authorization', `${this.auth.sendToken()}`);
 
   // GET /users
 
   // GET /users/agents
   async getAllAgents(): Promise<User[]> {
-    return await this.http.get<User[]>('/api/users/agents').toPromise();
+    return await this.http
+      .get<User[]>('/api/users/agents', {
+        headers: this.headers,
+      })
+      .toPromise();
   }
 
   // POST /users

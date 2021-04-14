@@ -1,0 +1,22 @@
+<div class="p-grid">
+  <div class="p-col" *ngIf="role == 'ROLE_SUPER'">
+    <p-card header="Admin">
+      <p-button [routerLink]="['/admin']">Enter</p-button>
+    </p-card>
+  </div>
+  <div class="p-col" *ngIf="role == 'ROLE_ADMIN' || role == 'ROLE_SUPER'">
+    <p-card header="Properties">
+      <p-button [routerLink]="['/property']">Enter</p-button>
+    </p-card>
+  </div>
+  <div class="p-col" *ngIf="role == 'ROLE_SALES' || role == 'ROLE_SUPER'">
+    <p-card header="Tenants">
+      <p-button [routerLink]="['/tenant']"> Enter </p-button>
+    </p-card>
+  </div>
+  <div class="p-col" *ngIf="role == 'ROLE_TENANT'">
+    <p-card header="Self Help">
+      <p-button> Enter </p-button>
+    </p-card>
+  </div>
+</div>

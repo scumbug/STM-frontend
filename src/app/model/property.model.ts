@@ -10,6 +10,7 @@ export interface Property {
   maintenanceFee: number;
   builtDate: Date;
   units: Unit[];
+  leasedUnits?: number;
 }
 
 export enum PropertyType {
