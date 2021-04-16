@@ -27,7 +27,8 @@ export class TenantComponent implements OnInit {
       .then((res) => (this.tenants = res));
   }
 
-  showConvertTenantForm() {
+  showConvertTenantForm(tenant) {
+    this.tenant = tenant;
     this.convertTenantForm = true;
   }
   showTenantForm() {
@@ -36,6 +37,9 @@ export class TenantComponent implements OnInit {
 
   onTenantFormClose(event) {
     this.tenantForm = event;
+    this.tenantService
+      .getTenants(TenantStatus.POTENTIAL)
+      .then((res) => (this.tenants = res));
   }
 
   onConvertTenantFormClose(event) {
@@ -46,7 +50,7 @@ export class TenantComponent implements OnInit {
     await this.tenantService.convertTenant(wrapper.tenant.tenantId);
     // refresh table
     await this.tenantService
-      .getTenants(TenantStatus.POTENTIAL)
+      .getTenants(TenantStatus.ACTIVE)
       .then((res) => (this.tenants = res));
   }
 

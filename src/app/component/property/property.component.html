@@ -1,5 +1,8 @@
 <p-toast></p-toast>
 
+<app-property-form [propertyForm]="propertyForm" [property]="property">
+</app-property-form>
+
 <div class="card">
   <p-toolbar styleClass="p-mb-4">
     <ng-template pTemplate="left">
@@ -9,7 +12,7 @@
         label="New"
         icon="pi pi-plus"
         class="p-button-success p-mr-2"
-        (click)="openNew()"
+        (click)="showPropertyForm()"
       ></button>
     </ng-template>
   </p-toolbar>
@@ -107,7 +110,7 @@
             pRipple
             icon="pi pi-pencil"
             class="p-button-rounded p-button-success p-mr-2"
-            (click)="editProperty(property)"
+            (click)="showPropertyForm(property)"
           ></button>
           <button
             pButton
@@ -249,6 +252,7 @@
       label="Save"
       icon="pi pi-check"
       class="p-button-text"
+      [disabled]="this.propertyForm.invalid"
       (click)="saveProperty()"
     ></button>
   </ng-template>

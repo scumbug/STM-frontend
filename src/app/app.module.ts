@@ -28,6 +28,7 @@ import { TenantService } from './service/tenant.service';
 import { LandingComponent } from './component/landing/landing.component';
 import { AdminComponent } from './component/admin/admin.component';
 import { ConvertTenantFormComponent } from './component/forms/convert-tenant-form/convert-tenant-form.component';
+import { PropertyFormComponent } from './component/forms/property-form/property-form.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ConvertTenantFormComponent } from './component/forms/convert-tenant-for
     LandingComponent,
     AdminComponent,
     ConvertTenantFormComponent,
+    PropertyFormComponent,
   ],
   imports: [
     BrowserModule,

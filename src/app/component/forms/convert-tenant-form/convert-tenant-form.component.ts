@@ -10,6 +10,7 @@ import { Tenant } from 'src/app/model/tenant.model';
 })
 export class ConvertTenantFormComponent implements OnInit {
   @Input() convertTenantForm: boolean = false;
+  @Input() tenant: Tenant;
   @Output() convertTenantFormEmitter = new EventEmitter();
 
   contactFormGroup: FormGroup;

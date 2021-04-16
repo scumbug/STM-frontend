@@ -8,6 +8,8 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Auth } from '../model/auth.model';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
+import { isBefore } from 'date-fns';
 
 @Injectable({
   providedIn: 'root',
@@ -28,9 +30,16 @@ export class AuthService {
         .toPromise();
       if (res.status == 200) {
         console.log(res);
-        this.token = res.body.token;
-        this.role = res.body.roles;
-        this.id = res.body.id;
+        localStorage.setItem('id', res.body.id);
+        localStorage.setItem('token', res.body.token);
+        localStorage.setItem('role', res.body.roles);
+        localStorage.setItem(
+          'expiration',
+          jwt_decode<JwtPayload>(res.body.token).exp.toString()
+        );
+        // this.token = res.body.token;
+        // this.role = res.body.roles;
+        // this.id = res.body.id;
         return true;
       }
     } catch (error) {
@@ -38,16 +47,28 @@ export class AuthService {
     }
   }
 
+  logout() {
+    localStorage.removeItem('id');
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('expiration');
+    this.router.navigate(['/login']);
+  }
+
   sendToken() {
-    return 'Bearer ' + this.token;
+    //return 'Bearer ' + this.token;
+    return 'Bearer ' + localStorage.getItem('token');
   }
 
   getRole() {
-    return this.role[0];
+    //return this.role[0];
+    return localStorage.getItem('role');
   }
 
   isLogin() {
-    return this.token != '';
+    //return this.token != '';
+    const expiration = new Date(parseInt(localStorage.getItem('expiration')));
+    return isBefore(expiration, new Date());
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -64,7 +85,6 @@ export class AuthService {
       }
       return true;
     }
-    this.router.navigate(['/login']);
     return false;
   }
 }

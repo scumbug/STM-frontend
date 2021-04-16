@@ -5,10 +5,11 @@
   (tenantFormEmitter)="onTenantFormClose($event)"
 ></app-tenant-form>
 
-<app-convert-tenant-form>
-  [convertTenantForm]="convertTenantForm" [tenant]="tenant"
+<app-convert-tenant-form
+  [convertTenantForm]="convertTenantForm"
+  [tenant]="tenant"
   (convertTenantFormEmitter)="onConvertTenantFormClose($event)"
-</app-convert-tenant-form>
+></app-convert-tenant-form>
 
 <p-toolbar styleClass="p-mb-4">
   <ng-template pTemplate="left">
@@ -106,7 +107,7 @@
           pRipple
           label="Convert"
           class="p-button-rounded p-button-warning"
-          (click)="convertTenant(tenant)"
+          (click)="showConvertTenantForm(tenant)"
           *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
         ></button>
       </td>
@@ -119,6 +120,7 @@
   </ng-template>
 </p-table>
 
+<!--
 <p-dialog
   [(visible)]="tenantDialog"
   [style]="{ width: '450px' }"
@@ -244,3 +246,4 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+-->

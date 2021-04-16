@@ -25,7 +25,8 @@ export class PropertyComponent implements OnInit {
   managementStatus: { label: ManagementStatus; value: ManagementStatus }[];
   propertyStatus: { label: PropertyStatus; value: PropertyStatus }[];
   propertyType: { label: PropertyType; value: PropertyType }[];
-  propertyForm: FormGroup;
+  //propertyForm: FormGroup;
+  propertyForm: boolean = false;
 
   constructor(
     private messageService: MessageService,
@@ -60,16 +61,26 @@ export class PropertyComponent implements OnInit {
       value: key,
     }));
 
+    this.property = {} as Property;
+
     // init property form
-    this.propertyForm = this.fb.group({
-      name: this.fb.control('', Validators.required),
-      address: this.fb.control('', Validators.required),
-      propertyType: this.fb.control('', Validators.required),
-      managementStatus: this.fb.control('', Validators.required),
-      propertyStatus: this.fb.control('', Validators.required),
-      maintenanceFee: this.fb.control('', Validators.min(0)),
-      builtDate: this.fb.control('', Validators.required),
-    });
+    // this.propertyForm = this.fb.group({
+    //   name: this.fb.control('', Validators.required),
+    //   address: this.fb.control('', Validators.required),
+    //   propertyType: this.fb.control('', Validators.required),
+    //   managementStatus: this.fb.control('', Validators.required),
+    //   propertyStatus: this.fb.control('', Validators.required),
+    //   maintenanceFee: this.fb.control('', Validators.min(0)),
+    //   builtDate: this.fb.control('', Validators.required),
+    // });
+  }
+
+  showPropertyForm(property?: Property) {
+    if (property) {
+      this.property = property;
+      console.log(this.property);
+    }
+    this.propertyForm = true;
   }
 
   openNew() {
