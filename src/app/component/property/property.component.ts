@@ -17,15 +17,13 @@ import { PropertyService } from 'src/app/service/property.service';
   styleUrls: ['./property.component.css'],
 })
 export class PropertyComponent implements OnInit {
+  bulkUnit: boolean = false;
+  propertyId: number;
   properties: Property[];
   property: Property;
   selected: Property[];
   submitted: boolean;
   propertyDialog: boolean;
-  managementStatus: { label: ManagementStatus; value: ManagementStatus }[];
-  propertyStatus: { label: PropertyStatus; value: PropertyStatus }[];
-  propertyType: { label: PropertyType; value: PropertyType }[];
-  //propertyForm: FormGroup;
   propertyForm: boolean = false;
 
   constructor(
@@ -37,6 +35,23 @@ export class PropertyComponent implements OnInit {
 
   ngOnInit(): void {
     // grab all property from backend
+    // this.propertyService.getProperties().then((res) => {
+    //   this.properties = res;
+    //   // grab available leased units
+    //   for (let property of this.properties) {
+    //     this.getLeasedUnit(property.propertyId).then((res) => {
+    //       property.leasedUnits = res;
+    //     });
+    //   }
+    // });
+
+    this.refreshProperties();
+
+    this.property = {} as Property;
+
+  }
+
+  async refreshProperties(): Promise<void> {
     this.propertyService.getProperties().then((res) => {
       this.properties = res;
       // grab available leased units
@@ -46,71 +61,18 @@ export class PropertyComponent implements OnInit {
         });
       }
     });
-
-    // setup enums
-    this.propertyStatus = Object.values(PropertyStatus).map((key) => ({
-      label: key,
-      value: key,
-    }));
-    this.managementStatus = Object.values(ManagementStatus).map((key) => ({
-      label: key,
-      value: key,
-    }));
-    this.propertyType = Object.values(PropertyType).map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-    this.property = {} as Property;
-
-    // init property form
-    // this.propertyForm = this.fb.group({
-    //   name: this.fb.control('', Validators.required),
-    //   address: this.fb.control('', Validators.required),
-    //   propertyType: this.fb.control('', Validators.required),
-    //   managementStatus: this.fb.control('', Validators.required),
-    //   propertyStatus: this.fb.control('', Validators.required),
-    //   maintenanceFee: this.fb.control('', Validators.min(0)),
-    //   builtDate: this.fb.control('', Validators.required),
-    // });
   }
 
-  showPropertyForm(property?: Property) {
-    if (property) {
-      this.property = property;
-      console.log(this.property);
-    }
-    this.propertyForm = true;
-  }
-
-  openNew() {
-    this.property = {} as Property;
-    this.submitted = false;
-    this.propertyDialog = true;
-  }
-
-  hideDialog() {
-    this.propertyDialog = false;
-    this.submitted = false;
-  }
-
-  editProperty(property: Property) {
-    this.property = { ...property };
-    // cast date string into date object
-    this.property.builtDate = new Date(this.property.builtDate);
-    this.propertyDialog = true;
-  }
-
-  async deleteProperty(property: Property) {
+  async archiveProperty(property: Property) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + property.name + '?',
+      message: 'Are you sure you want to archive ' + property.name + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         this.properties = this.properties.filter(
           (val) => val.propertyId !== property.propertyId
         );
-        const res = await this.propertyService.deleteProperties(
+        const res = await this.propertyService.archiveProperties(
           property.propertyId
         );
         this.property = {} as Property;
@@ -124,47 +86,6 @@ export class PropertyComponent implements OnInit {
     });
   }
 
-  async saveProperty() {
-    this.submitted = true;
-
-    if (this.property.name.trim()) {
-      if (this.property.propertyId) {
-        this.properties[
-          this.findIndexById(this.property.propertyId)
-        ] = this.property;
-
-        //TODO call PUT to backend
-        const res = await this.propertyService.addProperties(this.property);
-
-        // send toast
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Property Updated',
-          life: 3000,
-        });
-      } else {
-        //call POST to backend
-        const res = await this.propertyService.addProperties(this.property);
-        this.properties.push(res);
-
-        // send toast
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Property Created',
-          life: 3000,
-        });
-
-        // bulk add units
-        this.showBulkUnit(res.propertyId);
-      }
-
-      this.properties = [...this.properties];
-      this.propertyDialog = false;
-      this.property = {} as Property;
-    }
-  }
 
   findIndexById(id: number): number {
     let index = -1;
@@ -178,8 +99,6 @@ export class PropertyComponent implements OnInit {
     return index;
   }
 
-  bulkUnit: boolean = false;
-  propertyId: number;
   showBulkUnit(propertyId) {
     this.bulkUnit = true;
     this.propertyId = propertyId;
@@ -188,6 +107,7 @@ export class PropertyComponent implements OnInit {
   onBulkUnitClose(event) {
     this.bulkUnit = event;
   }
+
 
   async getLeasedUnit(id: number): Promise<number> {
     return (await this.propertyService.getLeaseUnitById(id)) as number;

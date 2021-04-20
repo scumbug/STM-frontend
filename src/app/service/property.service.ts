@@ -27,7 +27,7 @@ export class PropertyService {
       .toPromise();
   }
 
-  async deleteProperties(id: number): Promise<any> {
+  async archiveProperties(id: number): Promise<any> {
     return await this.http
       .delete<any>(`/api/properties/${id}`, { headers: this.headers })
       .toPromise();
@@ -36,6 +36,14 @@ export class PropertyService {
   async getLeaseUnitById(id: number): Promise<any> {
     return await this.http
       .get<any>(`/api/properties/${id}/leasecount`, { headers: this.headers })
+      .toPromise();
+  }
+
+  async getProperty(propertyId: number): Promise<Property> {
+    return await this.http
+      .get<Property>(`api/properties/${propertyId}`, {
+        headers: this.headers,
+      })
       .toPromise();
   }
 }

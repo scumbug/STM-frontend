@@ -1,0 +1,105 @@
+<app-schedule-amenity
+  #addAmenityDialog
+  (showScheduleAmenityDialogEmitter)="handleFormEmits()"
+></app-schedule-amenity>
+
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <button
+      pButton
+      pRipple
+      label="New"
+      icon="pi pi-plus"
+      class="p-button-success p-mr-2"
+      (click)="addAmenityDialog.showDialog()"
+    ></button>
+    <span class="p-buttonset">
+      <button
+        pButton
+        type="button"
+        label="Today's Schedule"
+        (click)="doFilter('today')"
+        [ngClass]="{ 'p-button-success': activeFilter == 'today' }"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Pending"
+        (click)="doFilter('PENDING')"
+        [ngClass]="{ 'p-button-success': activeFilter == 'PENDING' }"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Confirmed"
+        (click)="doFilter('CONFIRMED')"
+        [ngClass]="{ 'p-button-success': activeFilter == 'CONFIRMED' }"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="All"
+        (click)="dt.reset(); this.activeFilter = 'ALL'"
+        [ngClass]="{ 'p-button-success': activeFilter == 'ALL' }"
+      ></button>
+    </span>
+  </ng-template>
+</p-toolbar>
+
+<p-table
+  #dt
+  [value]="schedules"
+  [rows]="10"
+  [paginator]="true"
+  [globalFilterFields]="['scheduleStatus', 'scheduleDate']"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+>
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      <h5 class="p-m-0">Manage Requested Amenities</h5>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Service Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th>Unit Number <p-sortIcon field="type"></p-sortIcon></th>
+      <th>Scheduled Date/Time <p-sortIcon field="date"></p-sortIcon></th>
+      <th>Schedule Status</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-schedule>
+    <tr>
+      <td>
+        {{ schedule.amenityName }}
+      </td>
+      <td>
+        {{ schedule.propertyName }}
+      </td>
+      <td>
+        {{ schedule.scheduleDate }}
+      </td>
+      <td>
+        {{ schedule.scheduleStatus }}
+      </td>
+      <td>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-rounded p-button-success p-mr-2"
+          *ngIf="schedule.scheduleStatus == 'PENDING'"
+          (click)="confirmSchedule(schedule.scheduleId)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{ schedules ? schedules.length : 0 }} properties.
+    </div>
+  </ng-template>
+</p-table>

@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './component/admin/admin.component';
+import { AmenitiesComponent } from './component/amenities/amenities.component';
 import { BulkUnitComponent } from './component/bulk-unit/bulk-unit.component';
 import { LandingComponent } from './component/landing/landing.component';
 import { LoginComponent } from './component/login/login.component';
 import { MainComponent } from './component/main/main.component';
 import { PropertyComponent } from './component/property/property.component';
+import { TenantPaymentComponent } from './component/tenant-payment/tenant-payment.component';
+import { TenantRequestAmenityComponent } from './component/tenant-request-amenity/tenant-request-amenity.component';
 import { TenantComponent } from './component/tenant/tenant.component';
 import { TestComponent } from './component/test/test.component';
 import { UnitComponent } from './component/unit/unit.component';
@@ -76,6 +79,30 @@ const routes: Routes = [
     canActivate: [AuthService],
     data: {
       role: ['ROLE_SUPER', 'ROLE_SALES'],
+    },
+  },
+  {
+    path: 'amenities',
+    component: AmenitiesComponent,
+    canActivate: [AuthService],
+    data: {
+      role: ['ROLE_SUPER', 'ROLE_ADMIN'],
+    },
+  },
+  {
+    path: 'request-service',
+    component: TenantRequestAmenityComponent,
+    canActivate: [AuthService],
+    data: {
+      role: ['ROLE_SUPER', 'ROLE_TENANT'],
+    },
+  },
+  {
+    path: 'upload-payment',
+    component: TenantPaymentComponent,
+    canActivate: [AuthService],
+    data: {
+      role: ['ROLE_SUPER', 'ROLE_TENANT'],
     },
   },
   {

@@ -31,8 +31,14 @@ export class TenantService {
     }
   }
 
+  async getTenant(tenantId: number): Promise<Tenant> {
+    return await this.http
+      .get<Tenant>(`/api/tenants/${tenantId}`, { headers: this.headers })
+      .toPromise();
+  }
+
   // get tenant name
-  async getTenantName(userId: number): Promise<String> {
+  async getTenantName(userId: number): Promise<string> {
     const res = await this.http
       .get<User>(`/api/users/${userId}`, { headers: this.headers })
       .toPromise();
@@ -48,6 +54,14 @@ export class TenantService {
   async convertTenant(payload: number): Promise<Tenant> {
     return await this.http
       .get<Tenant>(`/api/tenants/convert/${payload},`, {
+        headers: this.headers,
+      })
+      .toPromise();
+  }
+
+  async getTenantByUserId(userId: number): Promise<Tenant> {
+    return await this.http
+      .get<Tenant>(`/api/tenants/users/${userId}`, {
         headers: this.headers,
       })
       .toPromise();

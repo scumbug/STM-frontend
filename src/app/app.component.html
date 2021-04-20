@@ -1,3 +1,13 @@
+<p-toolbar *ngIf="isLogin">
+  <div class="p-toolbar-group-left">
+    <p-button styleClass="p-button-success" label="Home" [routerLink]="['/']"></p-button>
+  </div>
+  <h2>Property Management</h2>
+  <div class="p-toolbar-group-right">
+    <p-button styleClass="p-button-danger" label="Logout" (click)="logout()"></p-button>
+  </div>
+</p-toolbar>
+
 <div class="p-mt-5 ">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

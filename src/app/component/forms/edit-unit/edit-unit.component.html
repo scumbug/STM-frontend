@@ -1,0 +1,63 @@
+<p-dialog
+  [(visible)]="editUnit"
+  (onHide)="onClose()"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="header"> Edit Unit </ng-template>
+  <ng-template pTemplate="content">
+    <form [formGroup]="editUnitFormGroup">
+      <div class="p-field">
+        <label for="unitNumber">Unit Number</label>
+        <input
+          type="text"
+          pInputText
+          id="unitNumber"
+          formControlName="unitNumber"
+          required
+          autofocus
+        />
+        <small
+          class="p-error"
+          *ngIf="
+            this.editUnitFormGroup.get('unitNumber').invalid &&
+            this.editUnitFormGroup.dirty
+          "
+          >Unit Number is required.</small
+        >
+      </div>
+
+      <div class="p-field">
+        <label for="floorArea">Floor Area</label>
+        <p-inputNumber
+          id="floorArea"
+          mode="decimal"
+          formControlName="floorArea"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          suffix=" sqm"
+        ></p-inputNumber>
+        <small
+          class="p-error"
+          *ngIf="
+            this.editUnitFormGroup.get('floorArea').invalid &&
+            this.editUnitFormGroup.dirty
+          "
+          >Floor Area is required.</small
+        >
+      </div>
+    </form>
+  </ng-template>
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="this.editUnitFormGroup.invalid"
+    ></button>
+  </p-footer>
+</p-dialog>

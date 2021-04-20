@@ -1,8 +1,11 @@
 <p-dialog
   [(visible)]="bulkUnit"
   (onHide)="onClose()"
+  [closeOnEscape]="false"
+  [closable]="false"
   [style]="{ width: '450px' }"
   styleClass="p-fluid"
+  [modal]="true"
 >
   <ng-template pTemplate="header">
     Add Units
@@ -33,7 +36,9 @@
           autofocus
           formControlName="unitNumber"
         />
-        <small class="p-error" *ngIf="submitted && !property.name"
+        <small
+          class="p-error"
+          *ngIf="this.units.get('unitNumber').invalid && this.units.dirty"
           >Unit Number is required.</small
         >
       </div>
@@ -48,7 +53,9 @@
           suffix=" sqm"
         ></p-inputNumber>
 
-        <small class="p-error" *ngIf="submitted && !property.name"
+        <small
+          class="p-error"
+          *ngIf="this.units.get('floorArea').invalid && this.units.dirty"
           >Floor Area is required.</small
         >
       </div>

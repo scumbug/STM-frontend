@@ -6,6 +6,9 @@
   (bulkUnitEmitter)="onBulkUnitClose($event)"
 ></app-bulk-unit>
 
+<app-edit-unit #editUnit (editUnitEmitter)="refreshUnits()"></app-edit-unit>
+<app-historical-rent #historicalRent></app-historical-rent>
+
 <p-toolbar styleClass="p-mb-4">
   <ng-template pTemplate="left">
     <button
@@ -49,16 +52,13 @@
           pInputText
           type="text"
           (input)="dt.filterGlobal($event.target.value, 'contains')"
-          placeholder="Search..."
+          placeholder="Search by unit number"
         />
       </span>
     </div>
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 3rem">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
       <th pSortableColumn="unitNumber">
         Unit Number <p-sortIcon field="unitNumber"></p-sortIcon>
       </th>
@@ -73,14 +73,11 @@
   </ng-template>
   <ng-template pTemplate="body" let-unit>
     <tr>
-      <td>
-        <p-tableCheckbox [value]="unit"></p-tableCheckbox>
-      </td>
       <td>{{ unit.unitNumber }}</td>
       <td>{{ unit.floorArea }}</td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{ unit.lease != null ? unit.lease.tenantName : "N/A" }}</td>
+      <td>{{ unit.lease != null ? unit.lease.startDate : "N/A" }}</td>
+      <td>{{ unit.lease != null ? unit.lease.endDate : "N/A" }}</td>
 
       <td>
         <button
@@ -88,14 +85,14 @@
           pRipple
           icon="pi pi-pencil"
           class="p-button-rounded p-button-success p-mr-2"
-          (click)="editUnit(unit)"
+          (click)="this.editUnit.showEditUnit(unit.unitId)"
         ></button>
         <button
           pButton
           pRipple
-          icon="pi pi-trash"
-          class="p-button-rounded p-button-warning"
-          (click)="deleteUnit(unit)"
+          icon="pi pi-chart-line"
+          class="p-button-rounded p-button-success p-mr-2"
+          (click)="this.historicalRent.showDialog(unit.unitId)"
         ></button>
       </td>
     </tr>
@@ -106,129 +103,5 @@
     </div>
   </ng-template>
 </p-table>
-
-<p-dialog
-  [(visible)]="unitDialog"
-  [style]="{ width: '450px' }"
-  header="Unit Details"
-  [modal]="true"
-  styleClass="p-fluid"
->
-  <ng-template pTemplate="content">
-    <div class="p-field">
-      <label for="name">Name</label>
-      <input
-        type="text"
-        pInputText
-        id="name"
-        [(ngModel)]="unit.name"
-        required
-        autofocus
-      />
-      <small class="p-error" *ngIf="submitted && !unit.name"
-        >Name is required.</small
-      >
-    </div>
-    <div class="p-field">
-      <label for="address">Address</label>
-      <textarea
-        id="address"
-        pInputTextarea
-        [(ngModel)]="unit.address"
-        required
-        rows="3"
-        cols="20"
-      ></textarea>
-    </div>
-    <div class="p-field">
-      <label for="type">Type</label>
-      <p-dropdown
-        [(ngModel)]="unit.unitType"
-        inputId="type"
-        [options]="unitType"
-        placeholder="Select"
-      >
-        <ng-template let-option pTemplate="item">
-          <span [class]="'product-badge status-' + option.label">{{
-            option.label
-          }}</span>
-        </ng-template>
-      </p-dropdown>
-    </div>
-
-    <div class="p-field">
-      <label for="managementStatus">Management Status</label>
-      <p-dropdown
-        [(ngModel)]="unit.managementStatus"
-        inputId="managementStatus"
-        [options]="managementStatus"
-        placeholder="Select"
-      >
-        <ng-template let-option pTemplate="item">
-          <span [class]="'product-badge status-' + option.value">{{
-            option.label
-          }}</span>
-        </ng-template>
-      </p-dropdown>
-    </div>
-
-    <div class="p-field">
-      <label for="unitStatus">unit Status</label>
-      <p-dropdown
-        [(ngModel)]="unit.unitStatus"
-        inputId="unitStatus"
-        [options]="unitStatus"
-        placeholder="Select"
-      >
-        <ng-template let-option pTemplate="item">
-          <span [class]="'product-badge status-' + option.value">{{
-            option.label
-          }}</span>
-        </ng-template>
-      </p-dropdown>
-    </div>
-
-    <div class="p-formgrid p-grid">
-      <div class="p-field p-col-6">
-        <label for="price">Common Area Maint. Fee</label>
-        <p-inputNumber
-          id="price"
-          [(ngModel)]="unit.maintenanceFee"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-        ></p-inputNumber>
-      </div>
-
-      <div class="p-field p-col">
-        <label for="builtDate">Date Constructed</label>
-        <p-calendar
-          inputId="builtDate"
-          [(ngModel)]="unit.builtDate"
-          appendTo="body"
-        ></p-calendar>
-      </div>
-    </div>
-  </ng-template>
-
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      label="Cancel"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="hideDialog()"
-    ></button>
-    <button
-      pButton
-      pRipple
-      label="Save"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="saveUnit()"
-    ></button>
-  </ng-template>
-</p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

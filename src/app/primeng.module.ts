@@ -20,6 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CardModule } from 'primeng/card';
 import { DataViewModule } from 'primeng/dataview';
+import { ChartModule } from 'primeng/chart';
 
 const PRIMENG = [
   TableModule,
@@ -42,6 +43,7 @@ const PRIMENG = [
   InputTextareaModule,
   CardModule,
   DataViewModule,
+  ChartModule,
 ];
 
 @NgModule({

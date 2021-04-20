@@ -1,0 +1,47 @@
+<p-dialog
+  [(visible)]="showTenantPaymentDialog"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+  [modal]="true"
+>
+  <form [formGroup]="tenantPaymentForm">
+    <label for="paymentId">Payment for</label>
+    <p-dropdown
+      [options]="payments"
+      optionLabel="paymentStartPeriod"
+      optionValue="paymentId"
+      placeholder="Select a period to pay for"
+      formControlName="paymentId"
+    ></p-dropdown>
+
+    <label for="amount">Amount Paid</label>
+    <p-inputNumber
+      id="amount"
+      formControlName="amount"
+      mode="currency"
+      currency="USD"
+      locale="en-US"
+    ></p-inputNumber>
+
+    <label for="paymentProof">Payment Proof</label>
+    <p-fileUpload
+      name="paymentProof"
+      chooseLabel="Choose file"
+      mode="basic"
+      accept="image/*"
+      (onSelect)="upload($event)"
+    ></p-fileUpload>
+  </form>
+
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="this.tenantPaymentForm.invalid"
+    ></button>
+  </p-footer>
+</p-dialog>

@@ -29,6 +29,16 @@ import { LandingComponent } from './component/landing/landing.component';
 import { AdminComponent } from './component/admin/admin.component';
 import { ConvertTenantFormComponent } from './component/forms/convert-tenant-form/convert-tenant-form.component';
 import { PropertyFormComponent } from './component/forms/property-form/property-form.component';
+import { EditUnitComponent } from './component/forms/edit-unit/edit-unit.component';
+import { LeaseService } from './service/lease.service';
+import { AmenitiesComponent } from './component/amenities/amenities.component';
+import { AmenityService } from './service/amenity.service';
+import { ScheduleService } from './service/schedule.service';
+import { ScheduleAmenityComponent } from './component/forms/schedule-amenity/schedule-amenity.component';
+import { TenantRequestAmenityComponent } from './component/tenant-request-amenity/tenant-request-amenity.component';
+import { TenantPaymentComponent } from './component/tenant-payment/tenant-payment.component';
+import { HistoricalRentComponent } from './component/visual/historical-rent/historical-rent.component';
+import { PaymentService } from './service/payment.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +56,12 @@ import { PropertyFormComponent } from './component/forms/property-form/property-
     AdminComponent,
     ConvertTenantFormComponent,
     PropertyFormComponent,
+    EditUnitComponent,
+    AmenitiesComponent,
+    ScheduleAmenityComponent,
+    TenantRequestAmenityComponent,
+    TenantPaymentComponent,
+    HistoricalRentComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +81,10 @@ import { PropertyFormComponent } from './component/forms/property-form/property-
     PropertyService,
     UnitService,
     TenantService,
+    LeaseService,
+    AmenityService,
+    ScheduleService,
+    PaymentService,
   ],
   bootstrap: [AppComponent],
 })

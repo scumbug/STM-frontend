@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Unit } from 'src/app/model/unit.model';
+import { LeaseService } from 'src/app/service/lease.service';
 import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
@@ -21,14 +22,30 @@ export class UnitComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private unitService: UnitService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private leaseService: LeaseService
   ) {}
 
   ngOnInit(): void {
     this.propertyId = this.actRoute.snapshot.params['propertyId'];
+    this.refreshUnits();
+  }
+
+  refreshUnits(): void {
     this.unitService
       .getUnits(this.propertyId)
-      .then((res) => (this.units = res));
+      .then((res) => {
+        // grab units from backend
+        this.units = res;
+      })
+      .then((res) => {
+        // grab lease status
+        for (const unit of this.units) {
+          this.leaseService.getLease(unit.unitId).then((res) => {
+            unit.lease = res;
+          });
+        }
+      });
   }
 
   openNew() {
@@ -47,7 +64,10 @@ export class UnitComponent implements OnInit {
   }
 
   onBulkUnitClose(event) {
-    this.bulkUnit = event;
+    this.bulkUnit = false;
+    this.unitService
+      .getUnits(this.propertyId)
+      .then((res) => (this.units = res));
   }
 
   async deleteUnit(unit: Unit) {

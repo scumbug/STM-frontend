@@ -1,0 +1,73 @@
+<p-dialog
+  [(visible)]="showScheduleAmenityDialog"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+  [modal]="true"
+>
+  <ng-template pTemplate="header"> Convert Tenant </ng-template>
+
+  <form [formGroup]="scheduleAmenityFormGroup">
+    <label for="property">Unit </label>
+    <p-dropdown
+      [options]="units"
+      optionLabel="unitNumber"
+      optionValue="unitId"
+      placeholder="Select a unit"
+      formControlName="unitId"
+    ></p-dropdown>
+    <small
+      class="p-error"
+      *ngIf="
+        this.scheduleAmenityFormGroup.get('unitId').invalid &&
+        this.scheduleAmenityFormGroup.dirty
+      "
+      >Select a unit</small
+    >
+
+    <label for="unit" *ngIf="this.units != null">Amenity </label>
+    <p-dropdown
+      [options]="amenities"
+      optionLabel="name"
+      optionValue="amenityId"
+      placeholder="Select an amenity"
+      formControlName="amenityId"
+    ></p-dropdown>
+    <small
+      class="p-error"
+      *ngIf="
+        this.scheduleAmenityFormGroup.get('amenityId').invalid &&
+        this.scheduleAmenityFormGroup.dirty
+      "
+      >Select an amenity</small
+    >
+
+    <label for="scheduleDate">Date</label>
+    <p-calendar
+      inputId="scheduleDate"
+      formControlName="scheduleDate"
+      appendTo="body"
+      [minDate]="minDateValue"
+      [readonlyInput]="true"
+    ></p-calendar>
+    <small
+      class="p-error"
+      *ngIf="
+        this.scheduleAmenityFormGroup.get('scheduleDate').invalid &&
+        this.scheduleAmenityFormGroup.dirty
+      "
+      >Select start date</small
+    >
+  </form>
+
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="this.scheduleAmenityFormGroup.invalid"
+    ></button>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,54 @@
+<p-dialog
+  [(visible)]="showRequestAmenityDialog"
+  [style]="{ width: '450px' }"
+  styleClass="p-fluid"
+  [modal]="true"
+>
+  <form [formGroup]="tenantRequestAmenityForm">
+    <label for="amenity">Amenity </label>
+    <p-dropdown
+      [options]="amenities"
+      optionLabel="name"
+      optionValue="amenityId"
+      placeholder="Select an amenity"
+      formControlName="amenityId"
+    ></p-dropdown>
+    <small
+      class="p-error"
+      *ngIf="
+        this.tenantRequestAmenityForm.get('amenityId').invalid &&
+        this.tenantRequestAmenityForm.dirty
+      "
+      >Select an amenity</small
+    >
+
+    <label for="scheduleDate">Date</label>
+    <p-calendar
+      inputId="scheduleDate"
+      formControlName="scheduleDate"
+      appendTo="body"
+      [minDate]="minDateValue"
+      [readonlyInput]="true"
+    ></p-calendar>
+    <small
+      class="p-error"
+      *ngIf="
+        this.tenantRequestAmenityForm.get('scheduleDate').invalid &&
+        this.tenantRequestAmenityForm.dirty
+      "
+      >Select schedule date</small
+    >
+  </form>
+
+  <p-footer>
+    <button
+      pButton
+      pRipple
+      label="Submit"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="onSubmit()"
+      [disabled]="this.tenantRequestAmenityForm.invalid"
+    ></button>
+  </p-footer>
+</p-dialog>

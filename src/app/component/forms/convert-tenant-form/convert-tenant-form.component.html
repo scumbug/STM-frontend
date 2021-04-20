@@ -2,29 +2,107 @@
   [(visible)]="convertTenantForm"
   (onHide)="onClose()"
   [style]="{ width: '450px' }"
+  [modal]="true"
   styleClass="p-fluid"
 >
   <ng-template pTemplate="header"> Convert Tenant </ng-template>
 
   <form [formGroup]="leaseFormGroup">
-    <label for="name">Name </label>
-    <input type="text" pInputText formControlName="unitId" />
-    <label for="username">Username </label>
-    <input type="text" pInputText formControlName="tenantId" />
-    <label for="password">Password (min 8 character) </label>
-    <input type="text" pInputText formControlName="rent" />
+    <label for="property">Property </label>
+    <p-dropdown
+      [options]="properties"
+      optionLabel="name"
+      optionValue="propertyId"
+      placeholder="Select a property"
+      (onChange)="getUnitsFromPropertyId($event.value)"
+    ></p-dropdown>
+
+    <label for="unit" *ngIf="this.units != null">Unit </label>
+    <p-dropdown
+      [options]="units"
+      optionLabel="unitNumber"
+      optionValue="unitId"
+      [placeholder]="
+        this.units.length == 0
+          ? 'No free units, select another property'
+          : 'Select a unit'
+      "
+      formControlName="unitId"
+      *ngIf="this.units != null"
+    ></p-dropdown>
+
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col-6">
+        <label for="startDate">Lease Start Date</label>
+        <p-calendar
+          inputId="startDate"
+          formControlName="startDate"
+          appendTo="body"
+        ></p-calendar>
+        <small
+          class="p-error"
+          *ngIf="
+            this.leaseFormGroup.get('startDate').invalid &&
+            this.leaseFormGroup.dirty
+          "
+          >Select start date</small
+        >
+      </div>
+      <div class="p-field p-col">
+        <label for="endDate">Lease End Date</label>
+        <p-calendar
+          inputId="endDate"
+          formControlName="endDate"
+          appendTo="body"
+        ></p-calendar>
+        <small
+          class="p-error"
+          *ngIf="
+            this.leaseFormGroup.get('endDate').invalid &&
+            this.leaseFormGroup.dirty
+          "
+          >Select end date</small
+        >
+      </div>
+    </div>
+    <label for="rent">Monthly Rent</label>
+    <p-inputNumber
+      id="rent"
+      mode="currency"
+      currency="USD"
+      locale="en-US"
+      formControlName="rent"
+    ></p-inputNumber>
+    <small
+      class="p-error"
+      *ngIf="
+        this.leaseFormGroup.get('rent').invalid && this.leaseFormGroup.dirty
+      "
+      >Input monthly rent</small
+    >
   </form>
 
   <form [formGroup]="contactFormGroup">
-    <label for="contactNumber">Contact Number </label>
+    <label for="contactNumber">Billing Contact Number </label>
     <input type="text" pInputText formControlName="contactNumber" />
-    <label for="contactEmail">Email </label>
+    <small
+      class="p-error"
+      *ngIf="
+        this.contactFormGroup.get('contactNumber').invalid &&
+        this.contactFormGroup.dirty
+      "
+      >Input Contact Number</small
+    >
+    <label for="contactEmail">Billing Email </label>
     <input type="text" pInputText formControlName="contactEmail" />
-  </form>
-
-  <form [formGroup]="tenantFormGroup">
-    <label for="notes">Notes </label>
-    <textarea pInputTextarea formControlName="tenantId"></textarea>
+    <small
+      class="p-error"
+      *ngIf="
+        this.contactFormGroup.get('contactEmail').invalid &&
+        this.contactFormGroup.dirty
+      "
+      >Input billing email</small
+    >
   </form>
 
   <p-footer>

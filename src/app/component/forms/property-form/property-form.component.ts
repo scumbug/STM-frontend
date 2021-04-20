@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, DoCheck, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Property, PropertyStatus } from 'src/app/model/property.model';
+import {ManagementStatus, Property, PropertyStatus, PropertyType} from 'src/app/model/property.model';
 import { PropertyService } from 'src/app/service/property.service';
+import { BulkUnitComponent } from 'src/app/component/bulk-unit/bulk-unit.component';
+
 
 @Component({
   selector: 'app-property-form',
@@ -9,10 +11,14 @@ import { PropertyService } from 'src/app/service/property.service';
   styleUrls: ['./property-form.component.css'],
 })
 export class PropertyFormComponent implements OnInit {
-  @Input() propertyForm: boolean = false;
+  @Input() propertyForm = false;
   @Input() property: Property;
   @Output() propertyFormEmitter = new EventEmitter();
+  @ViewChild('bulkUnitDialog') bulkUnitDialog: BulkUnitComponent;
 
+  managementStatus: { label: ManagementStatus; value: ManagementStatus }[];
+  propertyStatus: { label: PropertyStatus; value: PropertyStatus }[];
+  propertyType: { label: PropertyType; value: PropertyType }[];
   propertyFormGroup: FormGroup;
 
   constructor(
@@ -21,18 +27,33 @@ export class PropertyFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // build form for addition or edits
-    console.log(this.property);
+    // initalise form
     this.propertyFormGroup = this.createPropertyForm();
+
+    // setup enums
+    this.propertyStatus = Object.values(PropertyStatus).map((key) => ({
+      label: key,
+      value: key,
+    }));
+    this.managementStatus = Object.values(ManagementStatus).map((key) => ({
+      label: key,
+      value: key,
+    }));
+    this.propertyType = Object.values(PropertyType).map((key) => ({
+      label: key,
+      value: key,
+    }));
+
   }
 
-  showDialog(): void {
+  showDialog(property?: Property): void {
+    if (property) {
+      this.property = property;
+    } else {
+      this.property = {} as Property;
+    }
     this.propertyFormGroup = this.createPropertyForm();
     this.propertyForm = true;
-  }
-
-  updateForm(): void {
-    this.propertyFormGroup.setValue(this.property);
   }
 
   private createPropertyForm(): FormGroup {
@@ -43,7 +64,7 @@ export class PropertyFormComponent implements OnInit {
         this.property.address || '',
         Validators.required
       ),
-      type: this.fb.control(
+      propertyType: this.fb.control(
         this.property.propertyType || '',
         Validators.required
       ),
@@ -57,31 +78,29 @@ export class PropertyFormComponent implements OnInit {
         Validators.required
       ),
       builtDate: this.fb.control(
-        this.property.maintenanceFee || '',
+        new Date(this.property.builtDate) || '',
         Validators.required
       ),
     });
   }
 
-  onSubmit() {
-    //TODO: send to backend
+  async onSubmit(): Promise<void> {
 
-    //Check if edit or add
+    // Check if edit or add
+    if (this.property.propertyId == null) {
+      const res = await this.propertyService.addProperties(this.propertyFormGroup.value as Property);
+      this.bulkUnitDialog.showDialog(res.propertyId);
+    } else {
+      await this.propertyService.updateProperties(this.propertyFormGroup.value as Property);
+    }
 
-    console.log(this.propertyFormGroup.value);
-    //const res = this.propertyService.addProperties(this.propertyFormGroup.value);
-
-    //TODO: toast
+    // TODO: toast
 
     // close dialog
+    this.propertyFormEmitter.emit('refresh');
     this.propertyForm = false;
+
   }
 
-  onClose() {
-    this.propertyFormEmitter.emit(false);
-  }
 
-  ngOnDestroy() {
-    this.propertyFormEmitter.unsubscribe();
-  }
 }

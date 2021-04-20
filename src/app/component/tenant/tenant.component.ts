@@ -44,6 +44,9 @@ export class TenantComponent implements OnInit {
 
   onConvertTenantFormClose(event) {
     this.convertTenantForm = event;
+    this.tenantService
+      .getTenants(TenantStatus.POTENTIAL)
+      .then((res) => (this.tenants = res));
   }
 
   async convertTenant(wrapper) {
@@ -57,6 +60,12 @@ export class TenantComponent implements OnInit {
   async showPotentialTenant() {
     await this.tenantService
       .getTenants(TenantStatus.POTENTIAL)
+      .then((res) => (this.tenants = res));
+  }
+
+  async showPendingTenant() {
+    await this.tenantService
+      .getTenants(TenantStatus.PENDING)
       .then((res) => (this.tenants = res));
   }
 

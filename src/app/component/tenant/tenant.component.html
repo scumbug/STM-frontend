@@ -6,8 +6,7 @@
 ></app-tenant-form>
 
 <app-convert-tenant-form
-  [convertTenantForm]="convertTenantForm"
-  [tenant]="tenant"
+  #convertTenantForm
   (convertTenantFormEmitter)="onConvertTenantFormClose($event)"
 ></app-convert-tenant-form>
 
@@ -27,6 +26,12 @@
         type="button"
         label="Potential"
         (click)="showPotentialTenant()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Pending"
+        (click)="showPendingTenant()"
       ></button>
       <button
         pButton
@@ -73,13 +78,9 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 3rem">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th pSortableColumn="name">
-        Name <p-sortIcon field="name"></p-sortIcon>
-      </th>
-      <th pSortableColumn="assignedAgent">
+      <th>Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th>Shortlisted Unit</th>
+      <th>
         Assigned Sales Agent <p-sortIcon field="assignedAgent"></p-sortIcon>
       </th>
       <th>Tenant Status</th>
@@ -88,10 +89,8 @@
   </ng-template>
   <ng-template pTemplate="body" let-tenant>
     <tr>
-      <td>
-        <p-tableCheckbox [value]="tenant"></p-tableCheckbox>
-      </td>
       <td>{{ tenant.user.name }}</td>
+      <td></td>
       <td>{{ tenant.assignedAgent.name }}</td>
       <td>{{ tenant.tenant.tenantStatus }}</td>
       <td>
@@ -100,15 +99,28 @@
           pRipple
           icon="pi pi-pencil"
           class="p-button-rounded p-button-success p-mr-2"
-          (click)="editTenant(tenant)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Shortlist"
+          class="p-button-rounded p-button-warning"
+          *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
         ></button>
         <button
           pButton
           pRipple
           label="Convert"
           class="p-button-rounded p-button-warning"
-          (click)="showConvertTenantForm(tenant)"
+          (click)="convertTenantForm.showDialog(tenant.tenant)"
           *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Upload"
+          class="p-button-rounded p-button-warning"
+          *ngIf="tenant.tenant.tenantStatus == 'PENDING'"
         ></button>
       </td>
     </tr>

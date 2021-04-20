@@ -1,9 +1,10 @@
-import { EventEmitter, OnDestroy } from '@angular/core';
+import {EventEmitter, Host, OnDestroy} from '@angular/core';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Unit } from 'src/app/model/unit.model';
 import { UnitService } from 'src/app/service/unit.service';
+import {PropertyComponent} from "../property/property.component";
 
 @Component({
   selector: 'app-bulk-unit',
@@ -20,7 +21,7 @@ export class BulkUnitComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private unitService: UnitService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +30,7 @@ export class BulkUnitComponent implements OnInit, OnDestroy {
     this.bulkUnitForm = this.fb.group({
       units: this.unitArray,
     });
+    this.unitArray.push(this.createUnit());
   }
 
   private createUnit(): FormGroup {
@@ -47,7 +49,7 @@ export class BulkUnitComponent implements OnInit, OnDestroy {
     this.unitArray.removeAt(i);
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     this.unitService.bulkAddUnits(this.unitArray.value as Unit[]);
     // send toast
     this.messageService.add({
@@ -57,10 +59,16 @@ export class BulkUnitComponent implements OnInit, OnDestroy {
       life: 3000,
     });
     // close dialog
+    this.bulkUnitEmitter.emit();
     this.bulkUnit = false;
   }
 
-  showDialog(): void {
+  showDialog(propertyId: number): void {
+    this.propertyId = propertyId;
+    this.unitArray = this.fb.array([]);
+    this.bulkUnitForm = this.fb.group({
+      units: this.unitArray,
+    });
     this.bulkUnit = true;
   }
 
