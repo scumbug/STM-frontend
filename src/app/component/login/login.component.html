@@ -4,7 +4,7 @@
   <div>Login</div>
 </div>
 <div class="p-d-flex p-jc-center">
-  <form [formGroup]="loginForm">
+  <form [formGroup]="loginForm" (keyup.enter)="login()">
     <div class="p-inputgroup p-p-1">
       <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
       <input

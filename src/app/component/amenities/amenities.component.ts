@@ -24,6 +24,8 @@ export class AmenitiesComponent implements OnInit {
   refreshSchedules() {
     this.scheduleService.getSchedule().then((res) => {
       this.schedules = res;
+      this.dt.reset();
+      this.activeFilter = 'ALL';
       console.log(this.schedules);
     });
   }

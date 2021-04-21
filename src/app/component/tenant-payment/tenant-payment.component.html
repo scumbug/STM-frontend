@@ -5,10 +5,10 @@
   [modal]="true"
 >
   <form [formGroup]="tenantPaymentForm">
-    <label for="paymentId">Payment for</label>
+    <label for="paymentId">Payment for Period</label>
     <p-dropdown
       [options]="payments"
-      optionLabel="paymentStartPeriod"
+      optionLabel="paymentPeriod"
       optionValue="paymentId"
       placeholder="Select a period to pay for"
       formControlName="paymentId"

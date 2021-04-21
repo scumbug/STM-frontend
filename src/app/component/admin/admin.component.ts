@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AdminService } from 'src/app/service/admin.service';
 
 @Component({
@@ -11,7 +13,12 @@ export class AdminComponent implements OnInit {
   templateForm: FormGroup;
   existing: any;
   templateField: string;
-  constructor(private adminService: AdminService, private fb: FormBuilder) {}
+  constructor(
+    private adminService: AdminService,
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.templateForm = this.fb.group({
@@ -27,10 +34,16 @@ export class AdminComponent implements OnInit {
   async updateForm() {
     const payload = {
       name: this.existing.name,
-      adminId: this.existing.adminId,
+      settingId: this.existing.settingId,
       content: this.templateForm.get('content').value,
     };
-    console.log(payload);
     this.adminService.updateEmailTemplate(payload);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Settings Updated',
+      life: 3000,
+    });
   }
 }

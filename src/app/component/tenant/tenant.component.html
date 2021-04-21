@@ -104,14 +104,14 @@
           pButton
           pRipple
           label="Shortlist"
-          class="p-button-rounded p-button-warning"
+          class="p-button-rounded p-button-danger p-mr-2"
           *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
         ></button>
         <button
           pButton
           pRipple
           label="Convert"
-          class="p-button-rounded p-button-warning"
+          class="p-button-rounded p-mr-2"
           (click)="convertTenantForm.showDialog(tenant.tenant)"
           *ngIf="tenant.tenant.tenantStatus == 'POTENTIAL'"
         ></button>
@@ -119,7 +119,7 @@
           pButton
           pRipple
           label="Upload"
-          class="p-button-rounded p-button-warning"
+          class="p-button-rounded p-button-danger p-mr-2"
           *ngIf="tenant.tenant.tenantStatus == 'PENDING'"
         ></button>
       </td>

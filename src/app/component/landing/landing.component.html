@@ -19,12 +19,12 @@
       <p-button [routerLink]="['/amenities']"> Enter </p-button>
     </p-card>
   </div>
-  <div class="p-col" *ngIf="role == 'ROLE_TENANT' || role == 'ROLE_SUPER'">
+  <div class="p-col" *ngIf="role == 'ROLE_TENANT'">
     <p-card header="Request Amenity">
       <p-button (click)="tenantRequestAmenity.showDialog()"> Enter </p-button>
     </p-card>
   </div>
-  <div class="p-col" *ngIf="role == 'ROLE_TENANT' || role == 'ROLE_SUPER'">
+  <div class="p-col" *ngIf="role == 'ROLE_TENANT'">
     <p-card header="Upload Payment">
       <p-button (click)="tenantPayment.showDialog()"> Enter </p-button>
     </p-card>

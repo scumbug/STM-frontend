@@ -6,6 +6,7 @@ export interface Payment {
   paymentDate: Date;
   paymentStartPeriod: Date;
   paymentEndPeriod: Date;
+  paymentPeriod?: String;
   paymentProof: Blob;
   tenantId: number;
 }

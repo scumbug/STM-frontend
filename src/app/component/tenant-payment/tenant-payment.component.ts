@@ -28,8 +28,21 @@ export class TenantPaymentComponent implements OnInit {
   }
 
   showDialog() {
-    this.showTenantPaymentDialog = true;
-    this.getPaymentsForTenant();
+    this.getPaymentsForTenant().then((res) => {
+      if (this.payments.length != 0) {
+        this.showTenantPaymentDialog = true;
+        for (let payment of this.payments) {
+          payment.paymentPeriod = `${payment.paymentStartPeriod} to ${payment.paymentEndPeriod}`;
+        }
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'No Leased Unit!',
+          detail: 'You have no leased unit',
+          life: 3000,
+        });
+      }
+    });
   }
 
   private createTenantPaymentForm(): FormGroup {

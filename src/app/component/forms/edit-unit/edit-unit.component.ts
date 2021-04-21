@@ -1,22 +1,25 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Unit } from 'src/app/model/unit.model';
 import { UnitService } from 'src/app/service/unit.service';
-import {MessageService} from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-edit-unit',
   templateUrl: './edit-unit.component.html',
-  styleUrls: ['./edit-unit.component.css']
+  styleUrls: ['./edit-unit.component.css'],
 })
 export class EditUnitComponent implements OnInit {
-
   editUnit: boolean = false;
   editUnitFormGroup: FormGroup;
   unit: Unit;
   @Output() editUnitEmitter = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private unitService: UnitService, private messageService: MessageService) { }
+  constructor(
+    private fb: FormBuilder,
+    private unitService: UnitService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.unit = {} as Unit;
@@ -24,7 +27,7 @@ export class EditUnitComponent implements OnInit {
   }
 
   showEditUnit(unitId: number): void {
-    this.unitService.getUnit(unitId).then( (res) => {
+    this.unitService.getUnit(unitId).then((res) => {
       console.log(res);
       this.editUnitFormGroup = this.createUnitForm(res);
     });
@@ -40,30 +43,21 @@ export class EditUnitComponent implements OnInit {
     });
   }
 
-  // createServiceForm(unit: Unit): FormGroup {
-  //   return this.fb.group({
-  //     unitId: unit.unitId,
-  //     amenities: this.fb.control(unit.availableServices, Validators.required)
-  //   });
-  // }
-
   async onSubmit() {
     await this.unitService.editUnit(this.editUnitFormGroup.value as Unit);
     // send toast
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
-      detail: 'Units Created',
+      detail: 'Units Updated',
       life: 3000,
     });
     // close dialog
     this.editUnitEmitter.emit('refresh');
     this.editUnit = false;
-
   }
 
   onClose() {
     this.editUnitFormGroup.reset();
   }
-
 }

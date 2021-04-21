@@ -1,9 +1,21 @@
-import {Component, DoCheck, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {ManagementStatus, Property, PropertyStatus, PropertyType} from 'src/app/model/property.model';
+import {
+  ManagementStatus,
+  Property,
+  PropertyStatus,
+  PropertyType,
+} from 'src/app/model/property.model';
 import { PropertyService } from 'src/app/service/property.service';
 import { BulkUnitComponent } from 'src/app/component/bulk-unit/bulk-unit.component';
-
 
 @Component({
   selector: 'app-property-form',
@@ -43,7 +55,6 @@ export class PropertyFormComponent implements OnInit {
       label: key,
       value: key,
     }));
-
   }
 
   showDialog(property?: Property): void {
@@ -78,20 +89,25 @@ export class PropertyFormComponent implements OnInit {
         Validators.required
       ),
       builtDate: this.fb.control(
-        new Date(this.property.builtDate) || '',
+        this.property.builtDate != null
+          ? new Date(this.property.builtDate)
+          : '',
         Validators.required
       ),
     });
   }
 
   async onSubmit(): Promise<void> {
-
     // Check if edit or add
     if (this.property.propertyId == null) {
-      const res = await this.propertyService.addProperties(this.propertyFormGroup.value as Property);
+      const res = await this.propertyService.addProperties(
+        this.propertyFormGroup.value as Property
+      );
       this.bulkUnitDialog.showDialog(res.propertyId);
     } else {
-      await this.propertyService.updateProperties(this.propertyFormGroup.value as Property);
+      await this.propertyService.updateProperties(
+        this.propertyFormGroup.value as Property
+      );
     }
 
     // TODO: toast
@@ -99,8 +115,5 @@ export class PropertyFormComponent implements OnInit {
     // close dialog
     this.propertyFormEmitter.emit('refresh');
     this.propertyForm = false;
-
   }
-
-
 }

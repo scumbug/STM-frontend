@@ -1,14 +1,7 @@
-import { ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
-import {
-  ManagementStatus,
-  Property,
-  PropertyStatus,
-  PropertyType,
-} from 'src/app/model/property.model';
+import { FormBuilder } from '@angular/forms';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Property } from 'src/app/model/property.model';
 import { PropertyService } from 'src/app/service/property.service';
 
 @Component({
@@ -34,21 +27,9 @@ export class PropertyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // grab all property from backend
-    // this.propertyService.getProperties().then((res) => {
-    //   this.properties = res;
-    //   // grab available leased units
-    //   for (let property of this.properties) {
-    //     this.getLeasedUnit(property.propertyId).then((res) => {
-    //       property.leasedUnits = res;
-    //     });
-    //   }
-    // });
-
     this.refreshProperties();
 
     this.property = {} as Property;
-
   }
 
   async refreshProperties(): Promise<void> {
@@ -75,17 +56,16 @@ export class PropertyComponent implements OnInit {
         const res = await this.propertyService.archiveProperties(
           property.propertyId
         );
-        this.property = {} as Property;
+        //this.property = {} as Property;
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Property Deleted',
+          detail: 'Property Archived',
           life: 3000,
         });
       },
     });
   }
-
 
   findIndexById(id: number): number {
     let index = -1;
@@ -107,7 +87,6 @@ export class PropertyComponent implements OnInit {
   onBulkUnitClose(event) {
     this.bulkUnit = event;
   }
-
 
   async getLeasedUnit(id: number): Promise<number> {
     return (await this.propertyService.getLeaseUnitById(id)) as number;

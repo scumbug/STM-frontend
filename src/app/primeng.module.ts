@@ -21,6 +21,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CardModule } from 'primeng/card';
 import { DataViewModule } from 'primeng/dataview';
 import { ChartModule } from 'primeng/chart';
+import { DividerModule } from 'primeng/divider';
 
 const PRIMENG = [
   TableModule,
@@ -44,6 +45,7 @@ const PRIMENG = [
   CardModule,
   DataViewModule,
   ChartModule,
+  DividerModule,
 ];
 
 @NgModule({

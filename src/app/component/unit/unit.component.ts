@@ -82,7 +82,7 @@ export class UnitComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Property Deleted',
+          detail: 'Unit Deleted',
           life: 3000,
         });
       },

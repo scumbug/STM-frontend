@@ -1,13 +1,34 @@
 <form [formGroup]="propertyFormGroup">
   <p-dialog
     [(visible)]="propertyForm"
-    (onHide)="onClose()"
     [style]="{ width: '450px' }"
     header="Property Details"
     [modal]="true"
     styleClass="p-fluid"
   >
     <ng-template pTemplate="content">
+      <div class="p-d-flex" *ngIf="property.propertyId != null">
+        <div>
+          Total Units
+          <h4>{{ property.units ? property.units.length : 0 }}</h4>
+        </div>
+        <p-divider layout="vertical"></p-divider>
+        <div>
+          Total Leased Units
+          <h4>{{ property.leasedUnits }}</h4>
+        </div>
+        <p-divider layout="vertical"></p-divider>
+        <div>
+          Total Vacant Units
+          <h4>
+            {{
+              (property.units ? property.units.length : 0) -
+                property.leasedUnits
+            }}
+          </h4>
+        </div>
+      </div>
+
       <div class="p-field">
         <label for="name">Name</label>
         <input
@@ -18,7 +39,12 @@
           required
           autofocus
         />
-        <small class="p-error" *ngIf="this.propertyFormGroup.get('name').invalid && this.propertyFormGroup.dirty"
+        <small
+          class="p-error"
+          *ngIf="
+            this.propertyFormGroup.get('name').invalid &&
+            this.propertyFormGroup.dirty
+          "
           >Name is required.</small
         >
       </div>
@@ -32,7 +58,12 @@
           rows="3"
           cols="20"
         ></textarea>
-        <small class="p-error" *ngIf="this.propertyFormGroup.get('address').invalid  && this.propertyFormGroup.dirty"
+        <small
+          class="p-error"
+          *ngIf="
+            this.propertyFormGroup.get('address').invalid &&
+            this.propertyFormGroup.dirty
+          "
           >Address is required.</small
         >
       </div>
@@ -51,8 +82,13 @@
             }}</span>
           </ng-template>
         </p-dropdown>
-        <small class="p-error" *ngIf="this.propertyFormGroup.get('propertyType').invalid  && this.propertyFormGroup.dirty"
-        >Choose a property type</small
+        <small
+          class="p-error"
+          *ngIf="
+            this.propertyFormGroup.get('propertyType').invalid &&
+            this.propertyFormGroup.dirty
+          "
+          >Choose a property type</small
         >
       </div>
 
@@ -70,8 +106,13 @@
             }}</span>
           </ng-template>
         </p-dropdown>
-        <small class="p-error" *ngIf="this.propertyFormGroup.get('managementStatus').invalid  && this.propertyFormGroup.dirty"
-        >Choose management status</small
+        <small
+          class="p-error"
+          *ngIf="
+            this.propertyFormGroup.get('managementStatus').invalid &&
+            this.propertyFormGroup.dirty
+          "
+          >Choose management status</small
         >
       </div>
 
@@ -89,8 +130,13 @@
             }}</span>
           </ng-template>
         </p-dropdown>
-        <small class="p-error" *ngIf="this.propertyFormGroup.get('propertyStatus').invalid  && this.propertyFormGroup.dirty"
-        >Choose property status</small
+        <small
+          class="p-error"
+          *ngIf="
+            this.propertyFormGroup.get('propertyStatus').invalid &&
+            this.propertyFormGroup.dirty
+          "
+          >Choose property status</small
         >
       </div>
 
@@ -104,8 +150,13 @@
             currency="USD"
             locale="en-US"
           ></p-inputNumber>
-          <small class="p-error" *ngIf="this.propertyFormGroup.get('maintenanceFee').invalid  && this.propertyFormGroup.dirty"
-          >Set maint fee</small
+          <small
+            class="p-error"
+            *ngIf="
+              this.propertyFormGroup.get('maintenanceFee').invalid &&
+              this.propertyFormGroup.dirty
+            "
+            >Set maint fee</small
           >
         </div>
 
@@ -116,17 +167,19 @@
             formControlName="builtDate"
             appendTo="body"
           ></p-calendar>
-          <small class="p-error" *ngIf="this.propertyFormGroup.get('builtDate').invalid  && this.propertyFormGroup.dirty"
-          >Select built date</small
+          <small
+            class="p-error"
+            *ngIf="
+              this.propertyFormGroup.get('builtDate').invalid &&
+              this.propertyFormGroup.dirty
+            "
+            >Select built date</small
           >
         </div>
-
       </div>
-
     </ng-template>
 
     <ng-template pTemplate="footer">
-
       <button
         pButton
         pRipple
