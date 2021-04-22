@@ -37,8 +37,8 @@ export class TenantPaymentComponent implements OnInit {
       } else {
         this.messageService.add({
           severity: 'error',
-          summary: 'No Leased Unit!',
-          detail: 'You have no leased unit',
+          summary: 'Error',
+          detail: 'You have no leased unit or outstanding payment',
           life: 3000,
         });
       }

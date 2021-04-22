@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Amenity } from 'src/app/model/amenity.model';
+import { Schedule } from 'src/app/model/schedule.model';
 import { Tenant } from 'src/app/model/tenant.model';
 import { Unit } from 'src/app/model/unit.model';
 import { AmenityService } from 'src/app/service/amenity.service';
@@ -65,8 +66,12 @@ export class TenantRequestAmenityComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log(this.tenantRequestAmenityForm.value);
+
+    await this.scheduleService.addSchedule(
+      this.tenantRequestAmenityForm.value as Schedule
+    );
 
     // send toast
     this.messageService.add({

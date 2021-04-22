@@ -13,6 +13,5 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
     this.role = this.auth.getRole();
-    console.log(this.role);
   }
 }

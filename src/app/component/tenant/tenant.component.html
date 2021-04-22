@@ -78,11 +78,9 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th>Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th>Name</th>
       <th>Shortlisted Unit</th>
-      <th>
-        Assigned Sales Agent <p-sortIcon field="assignedAgent"></p-sortIcon>
-      </th>
+      <th>Assigned Sales Agent</th>
       <th>Tenant Status</th>
       <th></th>
     </tr>
@@ -94,12 +92,6 @@
       <td>{{ tenant.assignedAgent.name }}</td>
       <td>{{ tenant.tenant.tenantStatus }}</td>
       <td>
-        <button
-          pButton
-          pRipple
-          icon="pi pi-pencil"
-          class="p-button-rounded p-button-success p-mr-2"
-        ></button>
         <button
           pButton
           pRipple

@@ -29,7 +29,11 @@ export class LeaseService {
         lease.body.tenantId
       );
       if (tenant.tenantStatus == TenantStatus.PENDING) {
-        lease.body.tenantName = TenantStatus.PENDING;
+        lease.body.tenantName =
+          (await this.tenantService.getTenantName(tenant.userId)) +
+          ' (' +
+          TenantStatus.PENDING +
+          ') ';
       } else {
         lease.body.tenantName = await this.tenantService.getTenantName(
           tenant.userId
